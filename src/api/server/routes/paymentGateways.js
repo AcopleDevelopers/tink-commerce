@@ -12,6 +12,7 @@ class PaymentGatewaysRoute {
   registerRoutes() {
     this.router.get('/v1/payment_gateways/:name', security.checkUserScope.bind(this, security.scope.READ_PAYMENT_METHODS), this.getGateway.bind(this));
     this.router.put('/v1/payment_gateways/:name', security.checkUserScope.bind(this, security.scope.WRITE_PAYMENT_METHODS), this.updateGateway.bind(this));
+    this.router.get('/v1/payment_gateways/:transactionId', security.checkUserScope.bind(this, security.scope.WRITE_PAYMENT_METHODS), this.veririfyQvoTransaction.bind(this))
   }
 
   getGateway(req, res, next) {
@@ -24,6 +25,12 @@ class PaymentGatewaysRoute {
     PaymentGatewaysService.updateGateway(req.params.name, req.body).then(data => {
       res.send(data);
     }).catch(next);
+  }
+
+  veririfyQvoTransaction(req, res, next) {
+    PaymentGatewaysService.veririfyQvoTransaction(req.params.transactionId).then(data => {
+      res.send(data)
+    }).catch(next)
   }
 }
 

@@ -52,7 +52,7 @@ module.exports = {
   // url to uploads
   categoriesUploadUrl: '/images/categories',
   productsUploadUrl: '/images/products',
-  filesUploadUrl: '',
+  filesUploadUrl: '/content',
   themeAssetsUploadUrl: '/assets/images',
 
   // store UI language

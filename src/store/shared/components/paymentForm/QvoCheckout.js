@@ -1,8 +1,8 @@
 import React from 'react'
 import text from '../../text'
 import { formatCurrency } from '../../lib/helper'
+// import fetch from 'node-fetch'
 import api from '../../../server/api'
-import fetch from 'node-fetch'
 
 export default class QvoCheckout extends React.Component {
   constructor (props) {
@@ -35,7 +35,6 @@ export default class QvoCheckout extends React.Component {
   }
 
   executeScript () {
-    console.log('api:', api)
     const { formSettings, shopSettings, onPayment } = this.props;
     // Render del botón
     qvo.button.render({
@@ -67,7 +66,10 @@ export default class QvoCheckout extends React.Component {
       // onSuccess() es llamado cuando el pago ha sido correcto
       onSuccess: async function (response) {
         // Aquí puedes llamar a tu servidor para verificar la transacción
-        api.paymentGateways.client.get()
+        // const serverResponse = await fetch(`http://localhost:3001/v1/payment_gateways/${response.id}`)
+        const serverResponse = await api.paymentGateways.veririfyQvoTransaction(response.id)
+        console.log('serverResponse:', serverResponse)
+
         setTimeout(function() {
           window.alert('Pago Completado 😁!');
         }, 500);
@@ -81,6 +83,10 @@ export default class QvoCheckout extends React.Component {
   }
 
   render() {
+    api.paymentGateways.retrieve('qvo').then(({status, json}) => {
+      console.log('status:', status)
+      console.log('json:', json)
+    })
     console.log('api:', api)
     return (
       <div id="qvo-checkout" style={{marginLeft: '35%'}}>

@@ -1,3 +1,5 @@
+const qvoVerification = require('./qvoVerification')
+
 const express = require('express');
 const app = express();
 const helmet = require('helmet');
@@ -42,6 +44,7 @@ app.get('*', redirects);
 app.use(responseTime());
 app.use(cookieParser(settings.cookieSecretKey));
 app.get('*', pageRendering);
+app.post('/qvo-verification', qvoVerification)
 
 const server = app.listen(settings.storeListenPort, () => {
   const serverAddress = server.address();

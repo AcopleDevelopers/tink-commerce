@@ -1,6 +1,7 @@
 'use strict';
 
 const mongo = require('../../lib/mongo');
+const fetch = require('node-fetch')
 
 class PaymentGatewaysService {
   constructor() {}
@@ -21,6 +22,20 @@ class PaymentGatewaysService {
         { $set: data },
         { upsert: true })
       .then(res => this.getGateway(gatewayName));
+    }
+  }
+
+  async veririfyQvoTransaction(transctionId) {
+    const qvoSettings = await mongo.db.collection('PaymentGateways').findOne({name: 'qvo'})
+    const transactionData = await fetch(`https://api.qvo.cl/transactions/${transactionId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${qvoSettings['private-key']}`
+      }
+    })
+    console.log('transactionData:', transactionData)
+    if (transactionData.status === 'successful') {
+      return transactionData.gateway_response
     }
   }
 

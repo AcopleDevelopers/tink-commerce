@@ -94,6 +94,13 @@ function receivePaymentGateway(paymentGatewayEdit) {
   }
 }
 
+function receiveQvoTransaction(transactionData) {
+  return {
+    type: t.QVO_TRANSACTION,
+    transactionData
+  }
+}
+
 export function receiveShippingMethod(shippingMethodEdit) {
   return {
     type: t.SHIPPING_METHOD_RECEIVE,
@@ -394,6 +401,14 @@ export function updatePaymentGateway(gatewayName, data) {
     return api.paymentGateways.update(gatewayName, data).then(({status, json}) => {
       dispatch(receivePaymentGateway(json))
     }).catch(error => {});
+  }
+}
+
+export function veririfyQvoTransaction(transactionId) {
+  return (dispatch, getState) => {
+    return api.paymentGateways.veririfyQvoTransaction(transactionId).then(({status, json}) => {
+      dispatch(receiveQvoTransaction(json))
+    }).catch(error => {})
   }
 }
 
