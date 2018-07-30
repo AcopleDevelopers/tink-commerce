@@ -1,8 +1,11 @@
 const express = require('express');
 const ajaxRouter = express.Router();
 const jwt = require('jsonwebtoken');
-const CezerinClient = require('cezerin-client');
+const CezerinClient = require('ucommerce-client');
 const serverSettings = require('./lib/settings');
+
+// TEST FOR CHATBOT SETTINGS RETRIEVAL
+const AppSettingsService = require('./services/apps/settings');
 
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
 const STORE_ACCESS_TOKEN = jwt.sign(TOKEN_PAYLOAD, serverSettings.jwtSecretKey);
@@ -343,6 +346,20 @@ ajaxRouter.get('/payment_form_settings', (req, res, next) => {
 		});
 	} else {
 		res.end();
+	}
+});
+
+ajaxRouter.get('/chatbot/settings', (req, res, next) => {
+	try {
+		const settings = AppSettingsService.getSettings('ubot-chatbot');
+		console.log('settings:', settings);
+		if (settings) {
+			res.status('200').send(settings);
+		} else {
+			res.end();
+		}
+	} catch (error) {
+		console.log(error);
 	}
 });
 
