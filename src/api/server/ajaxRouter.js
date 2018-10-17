@@ -460,6 +460,7 @@ ajaxRouter.post('/checkout/webpay/verify', async (req, res, next) => {
 ajaxRouter.post('/checkout/webpay/voucher', async (req, res, next) => {
 	const order_id = orderData.order_id;
 	if (order_id) {
+		const { status, json } = await api.settings.retrieve();
 		try {
 			const paidOrder = await api.orders.update(order_id, {
 				date_paid: new Date(),
@@ -472,11 +473,11 @@ ajaxRouter.post('/checkout/webpay/voucher', async (req, res, next) => {
 				.then(cartResponse => fillCartItems(cartResponse))
 				.then(({ status, json }) => {
 					res.clearCookie('order_id');
-					res.redirect(301, 'http://localhost:3000/checkout-success');
+					res.redirect(301, `${json.domain}/checkout-success`);
 				});
 		} catch (error) {
 			console.log('Error updating order:', error.message);
-			res.redirect(301, 'http://localhost:3000/checkout');
+			res.redirect(301, `${json.domain}/checkout`);
 		}
 	} else {
 		res.end();

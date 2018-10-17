@@ -119,13 +119,13 @@ const addAllPages = async db => {
 	});
 	await addPage(db, {
 		slug: 'checkout-success',
-		meta_title: 'Gracias!',
+		meta_title: 'Gracias por su compra!',
 		enabled: true,
 		is_system: false
 	});
 	await addPage(db, {
 		slug: 'about',
-		meta_title: 'About us',
+		meta_title: 'Sobre Nosotros',
 		enabled: true,
 		is_system: false
 	});
@@ -229,7 +229,7 @@ const addEmailTemplates = async db => {
 	if (emailTemplatesNotExists) {
 		await db.collection('emailTemplates').insertOne({
 			name: 'order_confirmation',
-			subject: 'Order confirmation',
+			subject: 'Orden Confirmada',
 			body: `<div>
 			<div><b>Número de Orden</b>: {{number}}</div>
 			<div><b>Método de envío</b>: {{shipping_method}}</div>
