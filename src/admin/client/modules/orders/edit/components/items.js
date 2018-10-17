@@ -194,7 +194,9 @@ export class OrderItem extends React.Component {
 		const priceTotal = helper.formatCurrency(item.price_total, settings);
 		const discountTotal = helper.formatCurrency(item.discount_total, settings);
 		const imageUrl =
-			product && product.images.length > 0 ? product.images[0].url : null;
+			product && product.images && product.images.length > 0
+				? product.images[0].url
+				: null;
 		const thumbnailUrl = helper.getThumbnailUrl(imageUrl, 100);
 		const productOptions = product ? product.options : [];
 
