@@ -432,6 +432,7 @@ ajaxRouter.post('/checkout/webpay/verify', async (req, res, next) => {
 			detailOutput: { responseCode },
 			urlRedirection
 		} = await WP.getTransactionResult(token);
+
 		// Response Codes:
 		// 0: Accepted transaction
 		// -1: Rejected transaction
@@ -440,8 +441,16 @@ ajaxRouter.post('/checkout/webpay/verify', async (req, res, next) => {
 			const acknowlegedTransaction = await WP.acknowledgeTransaction(token);
 			res.status(200).send(Webpay.getHtmlTransitionPage(urlRedirection, token));
 		} else {
+			// TODO:
+			// - Create an HTML file with a nicer interface, read it and send it
 			console.log('Transaction code different than 0');
-			throw new Error('Transaction response code != 0');
+			const { status, json } = await api.settings.retrieve();
+			res.writeHead(200, { 'Content-Type': 'text/html' });
+			res.end(
+				`<html><h2>Transaccion Rechazada</h2><a href="${
+					json.domain
+				}/checkout">Reintentar</a></html>`
+			);
 		}
 	} catch (error) {
 		console.log('Error verifying the transaction:', error.message);
@@ -451,13 +460,24 @@ ajaxRouter.post('/checkout/webpay/verify', async (req, res, next) => {
 ajaxRouter.post('/checkout/webpay/voucher', async (req, res, next) => {
 	const order_id = orderData.order_id;
 	if (order_id) {
-		api.orders
-			.checkout(order_id)
-			.then(cartResponse => fillCartItems(cartResponse))
-			.then(({ status, json }) => {
-				res.clearCookie('order_id');
-				res.redirect(301, 'http://localhost:3000/checkout-success');
+		try {
+			const paidOrder = await api.orders.update(order_id, {
+				date_paid: new Date(),
+				paid: true
 			});
+			// TODO:
+			// - Create an HTML file with a nicer interface, read it and send it
+			api.orders
+				.checkout(order_id)
+				.then(cartResponse => fillCartItems(cartResponse))
+				.then(({ status, json }) => {
+					res.clearCookie('order_id');
+					res.redirect(301, 'http://localhost:3000/checkout-success');
+				});
+		} catch (error) {
+			console.log('Error updating order:', error.message);
+			res.redirect(301, 'http://localhost:3000/checkout');
+		}
 	} else {
 		res.end();
 	}
