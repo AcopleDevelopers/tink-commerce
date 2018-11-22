@@ -6,9 +6,5 @@ export const WP = new Webpay({
 	publicKey: CERTIFICATES.publicKey,
 	privateKey: CERTIFICATES.privateKey,
 	webpayKey: CERTIFICATES.webpayKey,
-	env: Webpay.ENV.INTEGRACION
+	env: Webpay.ENV.PRODUCCION
 });
-
-export const webpayOrders = [];
-
-export default {};

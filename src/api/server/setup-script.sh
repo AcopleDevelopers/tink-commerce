@@ -3,9 +3,6 @@ echo "Running startup-script"
 apt-get update
 apt-get install -y build-essential apt-transport-https ca-certificates curl software-properties-common
 
-echo "Deleting previous installation"
-rm -rf /var/www/ucommerce
-
 echo "Installing Docker CE"
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
@@ -37,6 +34,7 @@ echo "Running DB container"
 docker run --name store-db -d -p 27017:27017 -v /var/www/store-db:/data/db mongo:latest || docker start store-db
 
 echo "Installing Ucommerce"
+echo "Deleting previous installation if not new"
 if [ -d "/var/www/ucommerce" ] 
   then
     rm -rf /var/www/ecommerce

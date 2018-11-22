@@ -399,7 +399,7 @@ ajaxRouter.post('/chatbot/ask', async (req, res, next) => {
 /* 
  * [START] WEBPAY ROUTES AND LOGIC
  */
-// orderData will contain the order details that is being paid using Webpay.
+// orderData will contain the details of the order that is being processed
 // Order data will be needed at voucher step and redirection
 let orderData;
 ajaxRouter.post('/checkout/webpay/pay', async (req, res, next) => {
