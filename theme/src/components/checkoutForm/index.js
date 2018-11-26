@@ -86,7 +86,6 @@ export default class CheckoutForm extends React.Component {
 	};
 
 	handleShippingSubmit = values => {
-		console.log('asdfa:');
 		if (this.isShowPaymentForm()) {
 			const { shipping_address, billing_address, comments } = values;
 
