@@ -9,6 +9,7 @@ import { WP } from './WebpayClient';
 import Webpay from 'webpay-nodejs';
 import fetch from 'isomorphic-fetch';
 import { checkout } from '../../store/shared/actions';
+import moment from 'moment';
 
 const TOKEN_PAYLOAD = { email: 'store', scopes: ['admin'] };
 const STORE_ACCESS_TOKEN = jwt.sign(TOKEN_PAYLOAD, serverSettings.jwtSecretKey);
@@ -396,7 +397,7 @@ ajaxRouter.post('/chatbot/ask', async (req, res, next) => {
 	}
 });
 
-/* 
+/*
  * [START] WEBPAY ROUTES AND LOGIC
  */
 // orderData will contain the details of the order that is being processed
@@ -414,6 +415,8 @@ ajaxRouter.post('/checkout/webpay/pay', async (req, res, next) => {
 			finalURL: `${storeSettings.ajaxBaseUrl}/checkout/webpay/voucher`,
 			amount: orderData.amount
 		});
+		console.log('data.token:', data.token);
+		console.log('date', moment().format('DD/MM/YYYY HH:mm:ss'));
 
 		res.status(200).send({ redirectURL: `${data.url}?token_ws=${data.token}` });
 	} catch (error) {
