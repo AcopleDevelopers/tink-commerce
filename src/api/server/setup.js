@@ -14,85 +14,6 @@ const CONNECT_OPTIONS = {
 
 const DEFAULT_LANGUAGE = 'english';
 
-const addUsers = async db => {
-	db.collection('tokens').insertOne({
-		is_revoked: false,
-		date_created: new Date(),
-		expiration: 148,
-		name: 'utips-admin',
-		email: 'clementeserranosutil@gmail.cl',
-		scopes: ['admin']
-	});
-	db.collection('tokens').insertOne({
-		is_revoked: false,
-		date_created: new Date(),
-		expiration: 148,
-		name: 'andrea-milah',
-		email: 'andrea@milah.cl',
-		scopes: [
-			'read:products',
-			'read:product_categories',
-			'read:orders',
-			'read:customers',
-			'read:customer_groups',
-			'read:pages',
-			'read:order_statuses',
-			'read:theme',
-			'read:sitemap',
-			'read:shipping_methods',
-			'read:payment_methods',
-			'read:settings',
-			'read:files',
-			'dashboard',
-			'write:products',
-			'write:product_categories',
-			'write:orders',
-			'write:customers',
-			'write:customer_groups',
-			'write:pages',
-			'write:order_statuses',
-			'write:theme',
-			'write:shipping_methods',
-			'write:payment_methods',
-			'write:files'
-		]
-	});
-	db.collection('tokens').insertOne({
-		is_revoked: false,
-		date_created: new Date(),
-		expiration: 148,
-		name: 'inverhaus',
-		email: 'hernan@inverhaus.com',
-		scopes: [
-			'read:products',
-			'read:product_categories',
-			'read:orders',
-			'read:customers',
-			'read:customer_groups',
-			'read:pages',
-			'read:order_statuses',
-			'read:theme',
-			'read:sitemap',
-			'read:shipping_methods',
-			'read:payment_methods',
-			'read:settings',
-			'read:files',
-			'dashboard',
-			'write:products',
-			'write:product_categories',
-			'write:orders',
-			'write:customers',
-			'write:customer_groups',
-			'write:pages',
-			'write:order_statuses',
-			'write:theme',
-			'write:shipping_methods',
-			'write:payment_methods',
-			'write:files'
-		]
-	});
-};
-
 const addPage = async (db, pageObject) => {
 	const count = await db
 		.collection('pages')
@@ -234,7 +155,7 @@ const addEmailTemplates = async db => {
 			<div><b>Número de Orden</b>: {{number}}</div>
 			<div><b>Método de envío</b>: {{shipping_method}}</div>
 			<div><b>Método de pago</b>: {{payment_method}}</div>
-		  
+
 			<div style="width: 100%; margin-top: 20px;">
 			  Destino del envío<br /><br />
 			  <b>Nombre completo</b>: {{shipping_address.full_name}}<br />
@@ -245,7 +166,7 @@ const addEmailTemplates = async db => {
 			  <b>Estado</b>: {{shipping_address.state}}<br />
 			  <b>Teléefono</b>: {{shipping_address.phone}}
 			</div>
-		  
+
 			<table style="width: 100%; margin-top: 20px;">
 			  <tr>
 				<td style="width: 40%; padding: 10px 0px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; text-align: left;">Item</td>
@@ -253,7 +174,7 @@ const addEmailTemplates = async db => {
 				<td style="width: 10%; padding: 10px 0px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; text-align: right;">Qty</td>
 				<td style="width: 25%; padding: 10px 0px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; text-align: right;">Total</td>
 			  </tr>
-		  
+
 			  {{#each items}}
 			  <tr>
 				<td style="padding: 10px 0px; border-bottom: 1px solid #ccc; text-align: left;">{{name}}<br />{{variant_name}}</td>
@@ -262,9 +183,9 @@ const addEmailTemplates = async db => {
 				<td style="padding: 10px 0px; border-bottom: 1px solid #ccc; text-align: right;">$ {{price_total}}</td>
 			  </tr>
 			  {{/each}}
-		  
+
 			</table>
-		  
+
 			<table style="width: 100%; margin: 20px 0;">
 			  <tr>
 				<td style="width: 80%; padding: 10px 0px; text-align: right;"><b>Subtotal</b></td>
@@ -279,7 +200,7 @@ const addEmailTemplates = async db => {
 				<td style="width: 20%; padding: 10px 0px; text-align: right;">$ {{grand_total}}</td>
 			  </tr>
 			</table>
-		  
+
 		  </div>`
 		});
 
@@ -491,7 +412,6 @@ const addSettings = async (db, { domain }) => {
 	await addPaymentMethods(db);
 	await createAllIndexes(db);
 	await addUser(db, userEmail);
-	await addUsers(db);
 	await addSettings(db, {
 		domain
 	});
